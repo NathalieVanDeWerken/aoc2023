@@ -1,3 +1,5 @@
+from curses.ascii import isdigit
+
 from lib import load_input
 
 
@@ -10,15 +12,26 @@ def solve(data, part=1):
 
 
 def part_one(data):
-    pass
+    result = 0
+    for x in data:
+        y = list(filter(lambda z: isdigit(z), x))
+        result += int(y[0] + y[-1])
+    return result
 
 
 def part_two(data):
-    pass
+    result = 0
+    for x in data:
+        x = (x.replace('one', "on1e").replace('two', "tw2o").replace("three", "thre3e").replace("four", "fou4r")
+             .replace("five", "fiv5e").replace("six", "si6x").replace("seven", "seve7n").replace("eight", "eigh8t")
+             .replace("nine", "nin9e"))
+        y = list(filter(lambda z: isdigit(z), x))
+        result += int(y[0] + y[-1])
+    return result
 
 
 if __name__ == "__main__":
     print(solve(load_input("small")))
-    # print(solve(load_input()))
-    # print(solve(load_input("small"), 2))
-    # print(solve(load_input(), 2))
+    print(solve(load_input()))
+    print(solve(load_input("small2"), 2))
+    print(solve(load_input(), 2))
