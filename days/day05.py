@@ -4,7 +4,6 @@ from lib import load_input
 
 
 def solve(data, part=1):
-    lines = data.splitlines()
     if part == 1:
         return part_one(data)
     elif part == 2:
@@ -12,23 +11,20 @@ def solve(data, part=1):
 
 
 def part_one(data):
-    data =data.split("\n\n")
-    seeds = []
+    data = data.split("\n\n")
+    seeds = [int(x) for x in re.split("\\s+", data[0].split(": ")[1].strip())]
+    maps = list(map(lambda x: x.split(":")[1], data[1:]))
     mappings = {}
-    for part in data:
-        category, mapping = part.split(":")
-        if category == "seeds":
-            seeds = [int(x) for x in re.split("\\s+", mapping.strip())]
-            for i in seeds:
-                mappings[i] = i
-        else:
-            mappings2 = mappings.copy()
-            for line in mapping.strip().splitlines():
-                deststart, sourstart, rangelen = [int(x) for x in re.split("\\s+", line)]
-                for ind, val in mappings.items():
-                    if sourstart <= val < sourstart + rangelen:
-                        mappings2[ind] = deststart + (val - sourstart)
-            mappings = mappings2
+    for x in seeds:
+        mappings[x] = x
+    for part in maps:
+        mappings2 = mappings.copy()
+        for line in part.strip().splitlines():
+            deststart, sourstart, rangelen = [int(x) for x in re.split("\\s+", line)]
+            for ind, val in mappings.items():
+                if sourstart <= val < sourstart + rangelen:
+                    mappings2[ind] = deststart + (val - sourstart)
+        mappings = mappings2
     locations = list(map(lambda x: mappings[x], seeds))
     return min(locations)
 
